@@ -2,6 +2,7 @@ from flask import Flask, Blueprint
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -14,6 +15,7 @@ def create_app(config_name):
     api = Api(app)
     db.init_app(app)
     jwt.init_app(app)
+    CORS(app)
 
     @app.before_first_request
     def create_db():
