@@ -16,7 +16,7 @@ class UserModel(db.Model):
         db.session.commit()
 
     def check_password(self, password):
-        return sha256.verify_hash(password, self.password)
+        return sha256.verify(password, self.password)
 
     @classmethod
     def find_by_username(cls, username):

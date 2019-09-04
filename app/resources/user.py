@@ -30,8 +30,8 @@ class UserRegistration(Resource):
             refresh_token = create_refresh_token(identity=data['username'])
             return {
                 'message': f'User {data["username"]} was created.',
-                'access_token': access_token,
-                'refresh_token': refresh_token
+                'access-token': access_token,
+                'refresh-token': refresh_token
             }
 
         except:
@@ -50,9 +50,9 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
-                'message': f"Logged in as {current_user.username}",
-                'access_token': access_token,
-                'refresh_token': refresh_token
+                'username': data['username'],
+                'accessToken': access_token,
+                'refreshToken': refresh_token
                 }
         else:
             return {'message': 'Wrong credentials.'}

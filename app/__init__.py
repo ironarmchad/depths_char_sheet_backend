@@ -15,7 +15,7 @@ def create_app(config_name):
     api = Api(app)
     db.init_app(app)
     jwt.init_app(app)
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     @app.before_first_request
     def create_db():
