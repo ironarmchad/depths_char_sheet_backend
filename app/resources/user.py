@@ -29,7 +29,7 @@ class UserRegistration(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
-                'message': f'User {data["username"]} was created.',
+                'username': data['username'],
                 'access-token': access_token,
                 'refresh-token': refresh_token
             }
