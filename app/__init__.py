@@ -21,6 +21,9 @@ def create_app(config_name):
     def create_db():
         db.create_all()
 
+    from app.resources.user_validator import UsernameAvailable
+    api.add_resource(UsernameAvailable, '/user/available')
+
     from app.resources.user import AllUsers
     api.add_resource(AllUsers, '/user')
 
