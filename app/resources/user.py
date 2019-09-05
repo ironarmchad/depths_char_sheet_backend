@@ -22,7 +22,7 @@ class UserRegistration(Resource):
         data = parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
-            return {'message': f'User {data["username"]} already exists.'}
+            return {'message': 'UsernameInUse'}, 400
 
         try:
             UserModel(data['username'], data['password'])
@@ -35,7 +35,7 @@ class UserRegistration(Resource):
             }
 
         except:
-            return {'message': 'Something went wrong'}, 500
+            return {'error': 'Something went wrong'}, 500
 
 
 class UserLogin(Resource):
