@@ -15,6 +15,20 @@ class UserModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def __repr__(self):
+        return repr(self.to_json())
+
+    def __eq__(self, other):
+        return self.username == other.username
+
+    def __lt__(self, other):
+        return self.username < other.username
+
+    def to_json(self):
+        return {
+            'username': self.username,
+        }
+
     def check_password(self, password):
         return sha256.verify(password, self.password)
 
@@ -24,13 +38,8 @@ class UserModel(db.Model):
 
     @classmethod
     def return_all(cls):
-        def to_json(x):
-            return {
-                'username': x.username,
-                'password': x.password
-            }
-
-        return {'users': list(map(lambda x: to_json(x), UserModel.query.all()))}
+        users = UserModel.query.all().order_by(UserModel.username)
+        return {'users': list(map(lambda x: x.to_json(), users))}
 
     @classmethod
     def delete_all(cls):
