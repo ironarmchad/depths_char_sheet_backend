@@ -13,9 +13,6 @@ class AllUsers(Resource):
     def get(self):
         return UserModel.return_all()
 
-    def delete(self):
-        return UserModel.delete_all()
-
 
 class UserRegistration(Resource):
     def post(self):
@@ -24,18 +21,14 @@ class UserRegistration(Resource):
         if UserModel.find_by_username(data['username']):
             return {'message': 'UsernameInUse'}, 400
 
-        try:
-            UserModel(data['username'], data['password'])
-            access_token = create_access_token(identity=data['username'])
-            refresh_token = create_refresh_token(identity=data['username'])
-            return {
-                'username': data['username'],
-                'access-token': access_token,
-                'refresh-token': refresh_token
-            }
-
-        except:
-            return {'error': 'Something went wrong'}, 500
+        UserModel(data['username'], data['password'])
+        access_token = create_access_token(identity=data['username'])
+        refresh_token = create_refresh_token(identity=data['username'])
+        return {
+            'username': data['username'],
+            'access-token': access_token,
+            'refresh-token': refresh_token
+        }
 
 
 class UserLogin(Resource):
@@ -44,7 +37,7 @@ class UserLogin(Resource):
         current_user = UserModel.find_by_username(data['username'])
 
         if not current_user:
-            return {'message': f'User {data["username"]} doesn\'t exist'}
+            return {'message': f'User {data["username"]} doesn\'t exist'}, 400
 
         if current_user.check_password(data['password']):
             access_token = create_access_token(identity=data['username'])
@@ -53,14 +46,9 @@ class UserLogin(Resource):
                 'username': data['username'],
                 'accessToken': access_token,
                 'refreshToken': refresh_token
-                }
+            }
         else:
-            return {'message': 'Wrong credentials.'}
-
-
-class TokenRefresh(Resource):
-    def post(self):
-        return {'message': 'Token refresh'}
+            return {'message': 'Wrong credentials.'}, 400
 
 
 class SecretResource(Resource):
@@ -69,8 +57,3 @@ class SecretResource(Resource):
         return {
             'answer': 42
         }
-
-
-
-
-

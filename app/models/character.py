@@ -5,7 +5,7 @@ class CharacterModel(db.Model):
     __tablename__ = 'characters'
     id = db.Column(db.Integer, primary_key=True)
     owner = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    name = db.Column(db.String(50), unique=True, nullable=False, index=True)
+    name = db.Column(db.String(50), index=True)
     summary = db.Column(db.String(150))
     char_type = db.Column(db.String(10))
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
@@ -25,13 +25,10 @@ class CharacterModel(db.Model):
     def __init__(self, owner):
         self.owner = owner
         db.session.add(self)
-        db.session.commit(self)
+        db.session.commit()
 
     def __repr__(self):
-        return repr(self.to_json())
-
-    def __str__(self):
-        return str(self.to_json())
+        return f'ID: {self.id} OWNER: {self.owner} NAME: {self.name}'
 
     def __eq__(self, other):
         return self.name == other.name
@@ -48,7 +45,7 @@ class CharacterModel(db.Model):
             'char_type': self.char_type,
             'game_id': self.game_id,
             'lore': self.lore,
-            'strength': self.game_id,
+            'strength': self.strength,
             'reflex': self.reflex,
             'speed': self.speed,
             'vitality': self.vitality,
@@ -60,3 +57,59 @@ class CharacterModel(db.Model):
             'luck': self.luck,
             'charisma': self.charisma
         }
+
+    def patch_from_json(self, data):
+        if 'name' in data:
+            self.name = data['name']
+
+        if 'summary' in data:
+            self.summary = data['summary']
+
+        if 'char_type' in data:
+            self.char_type = data['char_type']
+
+        if 'game_id' in data:
+            self.game_id = data['game_id']
+
+        if 'lore' in data:
+            self.lore = data['lore']
+
+        if 'strength' in data:
+            self.strength = data['strength']
+
+        if 'reflex' in data:
+            self.reflex = data['reflex']
+
+        if 'speed' in data:
+            self.speed = data['speed']
+
+        if 'vitality' in data:
+            self.vitality = data['vitality']
+
+        if 'awareness' in data:
+            self.awareness = data['awareness']
+
+        if 'willpower' in data:
+            self.willpower = data['willpower']
+
+        if 'imagination' in data:
+            self.imagination = data['imagination']
+
+        if 'attunement' in data:
+            self.attunement = data['attunement']
+
+        if 'faith' in data:
+            self.faith = data['faith']
+
+        if 'luck' in data:
+            self.luck = data['luck']
+
+        if 'charisma' in data:
+            self.charisma = data['charisma']
+
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.query.get(id)

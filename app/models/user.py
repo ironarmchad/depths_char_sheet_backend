@@ -16,7 +16,7 @@ class UserModel(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return repr(self.to_json())
+        return f'ID: {self.id} USERNAME: {self.username}'
 
     def __eq__(self, other):
         return self.username == other.username
@@ -38,15 +38,5 @@ class UserModel(db.Model):
 
     @classmethod
     def return_all(cls):
-        users = UserModel.query.all().order_by(UserModel.username)
+        users = cls.query.order_by(UserModel.username).all()
         return {'users': list(map(lambda x: x.to_json(), users))}
-
-    @classmethod
-    def delete_all(cls):
-        try:
-            num_rows_deleted = db.session.query(cls).delete()
-            db.session.commit()
-            return {'message': f"{num_rows_deleted} row(s) deleted."}
-
-        except:
-            return {'message': 'Something went wrong'}
