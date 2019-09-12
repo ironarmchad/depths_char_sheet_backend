@@ -1,25 +1,26 @@
 import json
 
 
-def test_all_users(client):
-    response = client.get('/user')
-    data = json.loads(response.data)
-    assert response.status_code == 200
-    print(data)
-    assert data['users'][0]['username'] == 'test'
-
-
 def test_user_registration(client):
     # Testing reused username
-    assert client.post('/user/register', data={'username': 'test', 'password': 'test'}).status_code == 400
+    response = client.post(
+        '/user/register',
+        data=json.dumps({'username': 'test', 'password': 'test'}),
+        content_type='application/json'
+    )
+    assert response.status_code == 400
 
     # Testing successful request
-    response = client.post('/user/register', data={'username': 'test2', 'password': 'test'})
+    response = client.post(
+        '/user/register',
+        data=json.dumps({'username': 'test2', 'password': 'test'}),
+        content_type='application/json'
+    )
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data['username'] == 'test2'
-    assert 'access-token' in data
-    assert 'refresh-token' in data
+    assert 'accessToken' in data
+    assert 'refreshToken' in data
 
 
 def test_user_login(client, auth):
@@ -41,3 +42,44 @@ def test_user_login(client, auth):
         headers={'Authorization': 'Bearer ' + login_data['accessToken']}
     )
     assert json.loads(secret_response.data)['answer'] == 42
+
+
+def test_user_get(client, auth):
+    # Testing access denied
+    assert client.get('/user')
+
+    # Testing successful acquisition
+    login_response = json.loads(auth.login().data)
+    user_response = client.get(
+        '/user',
+        headers={'Authorization': 'Bearer ' + login_response['accessToken']}
+    )
+    assert json.loads(user_response.data)['username'] == 'test'
+
+
+def test_user_available(client):
+    # Tests for invalid json
+    response = client.post(
+        '/user/available',
+        data=json.dumps({'user': 'test'}),
+        content_type='application/json'
+    )
+    assert response.status_code == 400
+
+    # Test unavailable username
+    response = client.post(
+        '/user/available',
+        data=json.dumps({'username': 'test'}),
+        content_type='application/json'
+    )
+    assert response.status_code == 200
+    assert not response.json['available']
+
+    # Test unavailable username
+    response = client.post(
+        '/user/available',
+        data=json.dumps({'username': 'test2'}),
+        content_type='application/json'
+    )
+    assert response.status_code == 200
+    assert response.json['available']

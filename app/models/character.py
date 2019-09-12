@@ -1,4 +1,4 @@
-from app import db
+from app import db, marsh
 
 
 class CharacterModel(db.Model):
@@ -113,3 +113,8 @@ class CharacterModel(db.Model):
     @classmethod
     def get_by_id(cls, id):
         return cls.query.get(id)
+
+
+class CharacterSchema(marsh.ModelSchema):
+    class Meta:
+        model = CharacterModel

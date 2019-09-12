@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
 db = SQLAlchemy()
+marsh = Marshmallow()
+
 
 def create_app(config_over=None):
     app = Flask(__name__)
@@ -16,6 +19,7 @@ def create_app(config_over=None):
 
     api = Api(app)
     db.init_app(app)
+    marsh.init_app(app)
     migrate = Migrate(app, db)
     jwt = JWTManager(app)
 
@@ -24,14 +28,14 @@ def create_app(config_over=None):
     from app.resources.hello import Hello
     api.add_resource(Hello, '/hello')
 
-    from app.resources.user_validator import UsernameAvailable
-    api.add_resource(UsernameAvailable, '/user/available')
+    from app.resources.user import UserAvailable
+    api.add_resource(UserAvailable, '/user/available')
 
-    from app.resources.user import AllUsers
-    api.add_resource(AllUsers, '/user')
+    from app.resources.user import User
+    api.add_resource(User, '/user')
 
-    from app.resources.user import UserRegistration
-    api.add_resource(UserRegistration, '/user/register')
+    from app.resources.user import UserRegister
+    api.add_resource(UserRegister, '/user/register')
 
     from app.resources.user import UserLogin
     api.add_resource(UserLogin, '/user/login')

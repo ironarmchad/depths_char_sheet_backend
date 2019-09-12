@@ -1,6 +1,7 @@
+from marshmallow import Schema, fields, post_load
 from passlib.hash import pbkdf2_sha256 as sha256
 
-from app import db
+from app import db, marsh
 
 
 class UserModel(db.Model):
@@ -11,9 +12,7 @@ class UserModel(db.Model):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = sha256.hash(password)
-        db.session.add(self)
-        db.session.commit()
+        self.password = password
 
     def __repr__(self):
         return f'ID: {self.id} USERNAME: {self.username}'
@@ -24,10 +23,11 @@ class UserModel(db.Model):
     def __lt__(self, other):
         return self.username < other.username
 
-    def to_json(self):
-        return {
-            'username': self.username,
-        }
+    def add_user(self):
+        self.password = sha256.hash(self.password)
+        db.session.add(self)
+        db.session.commit()
+        return self
 
     def check_password(self, password):
         return sha256.verify(password, self.password)
@@ -36,7 +36,7 @@ class UserModel(db.Model):
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
 
-    @classmethod
-    def return_all(cls):
-        users = cls.query.order_by(UserModel.username).all()
-        return {'users': list(map(lambda x: x.to_json(), users))}
+
+class UserSchema(marsh.ModelSchema):
+    class Meta:
+        model = UserModel
