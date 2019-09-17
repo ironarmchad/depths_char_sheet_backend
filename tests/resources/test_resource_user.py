@@ -40,6 +40,17 @@ def test_user_available_post_false(client, populate_db):
     assert not response['available']
 
 
+# post request to /user/available should return 400 if no user is provided
+def test_user_available_no_username(client):
+    response = client.post(
+        '/user/available',
+        content_type='application/json',
+        data=json.dumps({'user': 'test1'})
+    )
+
+    assert response.status_code == 400
+
+
 # post request to /user/register without username and password should return a 400 error
 def test_user_register_invalid(client):
     response = client.post(

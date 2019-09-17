@@ -23,7 +23,7 @@ def test_repr():
 
 
 # add_game should add the game to the database
-def add_game(app):
+def test_add_game(app):
     with app.app_context():
         st = UserModel('test', 'test')
         st.add_user()
