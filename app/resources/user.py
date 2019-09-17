@@ -3,14 +3,14 @@ from flask_restful import Resource
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
 
-from app.models.user import UserModel, UserSchema
+from app.models.user import UserModel
 
 
 class User(Resource):
     @jwt_required
     def get(self):
         user = UserModel.query.get(get_jwt_identity())
-        return UserSchema(exclude=['password']).dump(user)
+        return user.jsonify_dict()
 
     '''    
     @jwt_required
@@ -41,29 +41,36 @@ class UserAvailable(Resource):
 
 class UserRegister(Resource):
     def post(self):
-        data = UserSchema().load(request.json)
+        data = request.get_json()
 
-        if UserModel.find_by_username(data.username):
+        if not 'username' in data or not 'password' in data:
+            return {'message': 'username and password must be provided.'}, 400
+
+        if UserModel.find_by_username(data['username']):
             return {'message': 'username must be unique'}, 400
 
-        data.add_user()
+        user = UserModel(data['username'], data['password']).add_user()
         return {
-            'username': data.username,
-            'accessToken': create_access_token(identity=data.id),
-            'refreshToken': create_refresh_token(identity=data.id)
+            'username': data['username'],
+            'accessToken': create_access_token(identity=user.id),
+            'refreshToken': create_refresh_token(identity=user.id)
         }
 
 
 class UserLogin(Resource):
     def post(self):
-        data = UserSchema().loads(request.data)
-        current_user = UserModel.find_by_username(data.username)
+        data = request.json
+
+        if not 'username' in data or not 'password' in data:
+            return {'message': 'username and password must be provided.'}, 400
+
+        current_user = UserModel.find_by_username(data['username'])
 
         if not current_user:
             return {
-                       'message': f'User {data.username} doesn\'t exist.'
+                       'message': f'User {data["username"]} doesn\'t exist.'
                    }, 400
-        elif not current_user.check_password(data.password):
+        elif not current_user.check_password(data['password']):
             return {
                        'message': f'Password doesn\'t match.'
                    }, 400
@@ -73,11 +80,3 @@ class UserLogin(Resource):
                 'accessToken': create_access_token(identity=current_user.id),
                 'refreshToken': create_access_token(identity=current_user.id)
             }
-
-
-class SecretResource(Resource):
-    @jwt_required
-    def get(self):
-        return {
-            'answer': 42
-        }

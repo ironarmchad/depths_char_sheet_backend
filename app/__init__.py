@@ -40,16 +40,19 @@ def create_app(config_over=None):
     from app.resources.user import UserLogin
     api.add_resource(UserLogin, '/user/login')
 
-    from app.resources.user import SecretResource
-    api.add_resource(SecretResource, '/secret')
-
-    from app.resources.character import CharacterAll
-    api.add_resource(CharacterAll, '/character/all')
+    from app.resources.character import CharacterNew
+    api.add_resource(CharacterNew, '/character/new')
 
     from app.resources.character import Character
-    api.add_resource(Character, '/character')
+    api.add_resource(Character, '/character/get/<char_id>')
 
     from app.resources.game import Game
     api.add_resource(Game, '/game')
 
     return app
+
+
+'''
+    from app.resources.character import CharacterAll
+    api.add_resource(CharacterAll, '/character/all')
+'''

@@ -1,4 +1,4 @@
-from app import db, marsh
+from app import db
 
 
 class CharacterModel(db.Model):
@@ -24,19 +24,20 @@ class CharacterModel(db.Model):
 
     def __init__(self, owner):
         self.owner = owner
-        db.session.add(self)
-        db.session.commit()
 
     def __repr__(self):
         return f'ID: {self.id} OWNER: {self.owner} NAME: {self.name}'
 
-    def __eq__(self, other):
-        return self.name == other.name
+    def add_character(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
 
-    def __lt__(self, other):
-        return self.name < other.name
+    def delete_character(self):
+        db.session.delete(self)
+        db.session.commit()
 
-    def to_json(self):
+    def jsonify_dict(self):
         return {
             'id': self.id,
             'owner': self.owner,
@@ -107,14 +108,9 @@ class CharacterModel(db.Model):
         if 'charisma' in data:
             self.charisma = data['charisma']
 
-        db.session.add(self)
-        db.session.commit()
+        return self
+
 
     @classmethod
     def get_by_id(cls, id):
         return cls.query.get(id)
-
-
-class CharacterSchema(marsh.ModelSchema):
-    class Meta:
-        model = CharacterModel

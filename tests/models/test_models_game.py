@@ -1,48 +1,79 @@
+from random import randint
+from tests.conftest import random_string
 from app.models.game import GameModel
+from app.models.user import UserModel
 
 
-def test_repr(app):
+# __init__ should create a game
+def test_init():
+    st = randint(1, 20)
+    game = GameModel(st)
+
+    assert game.st_id == st
+
+
+# __repr__ should return a string with name and st_id
+def test_repr():
+    st = randint(1, 20)
+    name = random_string()
+    game = GameModel(st)
+    game.name = name
+
+    assert str(st) in repr(game) and name in repr(game)
+
+
+# add_game should add the game to the database
+def add_game(app):
     with app.app_context():
-        game = GameModel.query.get(1)
-        print(repr(game))
-        assert repr(game) == 'ID: 1 NAME: None ST_ID: 1'
+        st = UserModel('test', 'test')
+        st.add_user()
+        game = GameModel(st.id)
+
+        assert not game.id
+
+        game.add_game()
+
+        assert game.id
 
 
-def test_comp(app):
-    with app.app_context():
-        game1 = GameModel.query.get(1)
-        game1.patch_from_json({'name': 'a'})
-        game2 = GameModel(1)
-        game2.patch_from_json({'name': 'z'})
-        assert not game1 == game2
-        assert game1 < game2
+# jsonify_dict should return dict with 'name' and 'st_id' (plus more but...)
+def test_jsonify_dict():
+    game = GameModel(1)
+    name = random_string()
+    game.name = name
+
+    json = game.jsonify_dict()
+
+    assert 'name' in json and 'st_id' in json
 
 
-def test_from_json(app):
+# patch_from_json should mutate all attributes based on name
+def test_patch_from_json():
     data = {
-        'name': 'test1',
-        'st_id': 1,
+        'name': random_string(),
         'active': True,
-        'lore': 'test2',
-        'summary': 'test3'
+        'lore': random_string(),
+        'summary': random_string()
     }
-    with app.app_context():
-        game = GameModel.query.get(1)
-        game.patch_from_json(data)
-        game_json = game.to_json()
-        for key in data:
-            print(key, data[key], game.__getattribute__(key), game_json[key])
-            assert data[key] == game.__getattribute__(key)
-            assert data[key] == game_json[key]
+    game = GameModel(1)
 
-        game.patch_from_json({'active': False})
-        print(game.active)
-        assert not game.active
+    game.patch_from_json(data)
+
+    for key in data:
+        print(key, data[key], game.__getattribute__(key))
+        assert data[key] == game.__getattribute__(key)
 
 
-def test_return_all(app):
-    with app.app_context():
-        assert len(GameModel.return_all()['games']) == 1
-        GameModel(1)
-        assert len(GameModel.return_all()['games']) == 2
+# patch_from_json should not change st_id
+def test_patch_from_json_st_id():
+    data = {
+        'st_id': 99
+    }
+    st = randint(1, 20)
+    game = GameModel(st)
 
+    assert game.st_id == st
+
+    game.patch_from_json(data)
+
+    assert game.st_id != data['st_id'] and game.st_id == st

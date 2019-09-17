@@ -13,19 +13,15 @@ class GameModel(db.Model):
     def __init__(self, st_id):
         self.st_id = st_id
         self.active = False
-        db.session.add(self)
-        db.session.commit()
 
     def __repr__(self):
         return f'ID: {self.id} NAME: {self.name} ST_ID: {self.st_id}'
 
-    def __eq__(self, other):
-        return self.name == other.name
+    def add_game(self):
+        db.session.add(self)
+        db.session.commit()
 
-    def __lt__(self, other):
-        return self.name < other.name
-
-    def to_json(self):
+    def jsonify_dict(self):
         return {
             'id': self.id,
             'name': self.name,
@@ -47,11 +43,3 @@ class GameModel(db.Model):
 
         if 'summary' in data:
             self.summary = data['summary']
-
-        db.session.add(self)
-        db.session.commit()
-
-    @classmethod
-    def return_all(cls):
-        games = GameModel.query.order_by(GameModel.name).all()
-        return {'games': list(map(lambda x: x.to_json(), games))}
