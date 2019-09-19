@@ -7,8 +7,8 @@ class CharacterModel(db.Model):
     owner = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(50), index=True)
     summary = db.Column(db.String(150))
-    char_type = db.Column(db.String(10))
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
+    charType = db.Column(db.String(10))
+    gameId = db.Column(db.Integer, db.ForeignKey('games.id'))
     lore = db.Column(db.String)
     strength = db.Column(db.Integer)
     reflex = db.Column(db.Integer)
@@ -43,8 +43,8 @@ class CharacterModel(db.Model):
             'owner': self.owner,
             'name': self.name,
             'summary': self.summary,
-            'char_type': self.char_type,
-            'game_id': self.game_id,
+            'charType': self.charType,
+            'gameId': self.gameId,
             'lore': self.lore,
             'strength': self.strength,
             'reflex': self.reflex,
@@ -66,11 +66,11 @@ class CharacterModel(db.Model):
         if 'summary' in data:
             self.summary = data['summary']
 
-        if 'char_type' in data:
-            self.char_type = data['char_type']
+        if 'charType' in data:
+            self.charType = data['charType']
 
-        if 'game_id' in data:
-            self.game_id = data['game_id']
+        if 'gameId' in data:
+            self.gameId = data['gameId']
 
         if 'lore' in data:
             self.lore = data['lore']

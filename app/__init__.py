@@ -23,7 +23,9 @@ def create_app(config_over=None):
     migrate = Migrate(app, db)
     jwt = JWTManager(app)
 
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, supports_credentials=True)
+
+    app.config['CORS_HEADERS'] = 'Content-Type'
 
     from app.resources.hello import Hello
     api.add_resource(Hello, '/hello')
