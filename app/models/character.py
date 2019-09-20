@@ -110,7 +110,10 @@ class CharacterModel(db.Model):
 
         return self
 
-
     @classmethod
     def get_by_id(cls, id):
         return cls.query.get(id)
+
+    @classmethod
+    def get_all_by_owner(cls, owner):
+        return cls.query.filter_by(owner=owner).all()

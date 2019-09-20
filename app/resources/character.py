@@ -78,3 +78,14 @@ class Character(Resource):
         character.delete_character()
 
         return {'message': 'Character deleted.'}
+
+
+class CharacterAll(Resource):
+    @jwt_required
+    def get(self):
+        owner = get_jwt_identity()
+        characters = CharacterModel.get_all_by_owner(owner)
+        if not characters:
+            return {"message": "No characters found."}, 400
+        else:
+            return {"characters": [character.jsonify_dict() for character in characters]}

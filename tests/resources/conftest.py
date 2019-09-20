@@ -63,8 +63,10 @@ def auth(client):
 def populate_db(app):
     with app.app_context():
         user1 = UserModel('test1', 'test').add_user()
-        user2 = UserModel('test2', 'test').add_user()
-        user3 = UserModel('test3', 'test').add_user()
+        UserModel('test2', 'test').add_user()
+        UserModel('test3', 'test').add_user()
 
-        character1 = CharacterModel(user1.id).add_character()
+        CharacterModel(user1.id).add_character()
+        CharacterModel(user1.id).add_character()
+        CharacterModel(user1.id).add_character()
 

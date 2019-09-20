@@ -42,6 +42,9 @@ def create_app(config_over=None):
     from app.resources.user import UserLogin
     api.add_resource(UserLogin, '/user/login')
 
+    from app.resources.character import CharacterAll
+    api.add_resource(CharacterAll, '/character/all')
+
     from app.resources.character import CharacterNew
     api.add_resource(CharacterNew, '/character/new')
 

@@ -64,8 +64,8 @@ def test_patch_from_json(app):
     data = {
         'name': random_string(),
         'summary': random_string(),
-        'char_type': random_string(),
-        'game_id': randint(0, 20),
+        'charType': random_string(),
+        'gameId': randint(0, 20),
         'lore': random_string(),
         'strength': randint(0, 20),
         'reflex': randint(0, 20),
@@ -125,6 +125,20 @@ def test_get_by_id(app):
         id = character.id
 
         assert CharacterModel.get_by_id(id).owner == owner.id
+
+
+# get_all_by_owner should return a list of characters
+def test_get_all_by_owner(app):
+    with app.app_context():
+        owner = UserModel('test', 'test').add_user()
+        CharacterModel(owner.id).add_character()
+        CharacterModel(owner.id).add_character()
+        CharacterModel(owner.id).add_character()
+
+        characters = CharacterModel.get_all_by_owner(owner.id)
+
+        assert isinstance(characters[0], CharacterModel)
+        assert len(characters) == 3
 
 
 
