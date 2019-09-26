@@ -21,6 +21,7 @@ class CharacterModel(db.Model):
     faith = db.Column(db.Integer)
     luck = db.Column(db.Integer)
     charisma = db.Column(db.Integer)
+    pointValue = db.Column(db.Integer)
 
     def __init__(self, owner):
         self.owner = owner
@@ -56,7 +57,8 @@ class CharacterModel(db.Model):
             'attunement': self.attunement,
             'faith': self.faith,
             'luck': self.luck,
-            'charisma': self.charisma
+            'charisma': self.charisma,
+            'pointValue': self.pointValue
         }
 
     def patch_from_json(self, data):
@@ -107,6 +109,9 @@ class CharacterModel(db.Model):
 
         if 'charisma' in data:
             self.charisma = data['charisma']
+
+        if 'pointValue' in data:
+            self.pointValue = data['pointValue']
 
         return self
 

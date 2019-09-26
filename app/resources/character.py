@@ -64,8 +64,12 @@ class Character(Resource):
         except Error as err:
             return {'message': err.message}, 400
 
-        character.patch_from_json(data).add_character()
+        print("initial: " + repr(character))
+        print(data)
 
+        character.patch_from_json(data['character']).add_character()
+
+        print(character)
         return character.jsonify_dict()
 
     @jwt_required
