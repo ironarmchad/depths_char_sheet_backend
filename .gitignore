@@ -126,5 +126,3 @@ dmypy.json
 # IDE stuff
 .idea/
 
-# alembic migrations
-migrations/
