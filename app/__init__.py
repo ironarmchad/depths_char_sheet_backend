@@ -12,7 +12,7 @@ marsh = Marshmallow()
 
 def create_app(config_over=None):
     app = Flask(__name__)
-    app.config.from_pyfile(f'../config/dev.py')
+    app.config.from_pyfile(f'../config/prod.py')
 
     if config_over:
         app.config.from_mapping(config_over)
