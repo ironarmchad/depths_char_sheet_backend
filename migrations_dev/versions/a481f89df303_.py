@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 658916aff098
-Revises: 93d19f2cce3b
-Create Date: 2019-09-09 13:05:54.857921
+Revision ID: a481f89df303
+Revises: 
+Create Date: 2019-10-01 10:19:12.795324
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '658916aff098'
-down_revision = '93d19f2cce3b'
+revision = 'a481f89df303'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -27,7 +27,7 @@ def upgrade():
     )
     op.create_table('games',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=40), nullable=False),
+    sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('st_id', sa.Integer(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=False),
     sa.Column('lore', sa.String(), nullable=True),
@@ -39,10 +39,10 @@ def upgrade():
     op.create_table('characters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('owner', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=True),
     sa.Column('summary', sa.String(length=150), nullable=True),
-    sa.Column('char_type', sa.String(length=10), nullable=True),
-    sa.Column('game_id', sa.Integer(), nullable=True),
+    sa.Column('charType', sa.String(length=10), nullable=True),
+    sa.Column('gameId', sa.Integer(), nullable=True),
     sa.Column('lore', sa.String(), nullable=True),
     sa.Column('strength', sa.Integer(), nullable=True),
     sa.Column('reflex', sa.Integer(), nullable=True),
@@ -55,11 +55,12 @@ def upgrade():
     sa.Column('faith', sa.Integer(), nullable=True),
     sa.Column('luck', sa.Integer(), nullable=True),
     sa.Column('charisma', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['game_id'], ['games.id'], ),
+    sa.Column('pointValue', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['gameId'], ['games.id'], ),
     sa.ForeignKeyConstraint(['owner'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_characters_name'), 'characters', ['name'], unique=True)
+    op.create_index(op.f('ix_characters_name'), 'characters', ['name'], unique=False)
     # ### end Alembic commands ###
 
 

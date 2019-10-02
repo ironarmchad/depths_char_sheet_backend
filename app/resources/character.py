@@ -3,33 +3,8 @@ from flask_restful import Resource
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
                                 get_jwt_identity, get_raw_jwt)
 
+from app.resources import Error, get_character
 from app.models.character import CharacterModel
-
-
-class Error(Exception):
-    def __init__(self):
-        self.message = 'Error has occurred.'
-
-
-class NotFoundError(Error):
-    def __init__(self):
-        self.message = 'Character could not be found.'
-
-
-class NotOwnerError(Error):
-    def __init__(self):
-        self.message = 'Cannot access another players character.'
-
-
-def get_character(char_id):
-    character = CharacterModel.get_by_id(char_id)
-
-    if not character:
-        raise NotFoundError()
-    elif character.owner != get_jwt_identity():
-        raise NotOwnerError()
-    else:
-        return character
 
 
 class CharacterNew(Resource):
@@ -64,12 +39,8 @@ class Character(Resource):
         except Error as err:
             return {'message': err.message}, 400
 
-        print("initial: " + repr(character))
-        print(data)
-
         character.patch_from_json(data['character']).add_character()
 
-        print(character)
         return character.jsonify_dict()
 
     @jwt_required

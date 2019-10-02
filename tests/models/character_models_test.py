@@ -77,7 +77,8 @@ def test_patch_from_json(app):
         'attunement': randint(0, 20),
         'faith': randint(0, 20),
         'luck': randint(0, 20),
-        'charisma': randint(0, 20)
+        'charisma': randint(0, 20),
+        'pointValue': randint(-100, 300)
     }
 
     character = CharacterModel(1)

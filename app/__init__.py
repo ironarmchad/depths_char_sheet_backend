@@ -10,12 +10,9 @@ db = SQLAlchemy()
 marsh = Marshmallow()
 
 
-def create_app(config_over=None):
+def create_app(config_type):
     app = Flask(__name__)
-    app.config.from_pyfile(f'../config/prod.py')
-
-    if config_over:
-        app.config.from_mapping(config_over)
+    app.config.from_pyfile(f'../config/{config_type}.py')
 
     api = Api(app)
     db.init_app(app)
@@ -50,6 +47,15 @@ def create_app(config_over=None):
 
     from app.resources.character import Character
     api.add_resource(Character, '/character/get/<char_id>')
+
+    from app.resources.ability import Ability
+    api.add_resource(Ability, '/ability/get/<id>')
+
+    from app.resources.ability import AbilityNew
+    api.add_resource(AbilityNew, '/ability/new/<char_id>')
+
+    from app.resources.ability import AbilityAll
+    api.add_resource(AbilityAll, '/ability/all/<char_id>')
 
     from app.resources.game import Game
     api.add_resource(Game, '/game')

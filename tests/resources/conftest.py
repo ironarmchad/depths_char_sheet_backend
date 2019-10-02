@@ -1,9 +1,6 @@
 import pytest
 import json
 
-from app.models.user import UserModel
-from app.models.character import CharacterModel
-
 
 @pytest.fixture
 def client(app):
@@ -57,16 +54,3 @@ class AuthActions(object):
 @pytest.fixture
 def auth(client):
     return AuthActions(client)
-
-
-@pytest.fixture
-def populate_db(app):
-    with app.app_context():
-        user1 = UserModel('test1', 'test').add_user()
-        UserModel('test2', 'test').add_user()
-        UserModel('test3', 'test').add_user()
-
-        CharacterModel(user1.id).add_character()
-        CharacterModel(user1.id).add_character()
-        CharacterModel(user1.id).add_character()
-

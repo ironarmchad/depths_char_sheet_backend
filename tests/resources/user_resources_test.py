@@ -5,13 +5,13 @@ from app.models.user import UserModel
 
 # get request to /user/# should return json with username
 def test_user_get(client, auth, populate_db):
-    jwt = auth.login('test1', 'test').json
+    jwt = auth.login('test', 'test').json
     response = client.get(
         '/user',
         headers={'Authorization': 'Bearer ' + jwt['accessToken']}
     ).json
 
-    assert response['username'] == 'test1'
+    assert response['username'] == 'test'
 
 
 # post request to /user/available with the possible username will return json with
@@ -34,7 +34,7 @@ def test_user_available_post_false(client, populate_db):
     response = client.post(
         '/user/available',
         content_type='application/json',
-        data=json.dumps({'username': 'test1'})
+        data=json.dumps({'username': 'test'})
     ).get_json()
 
     assert not response['available']
@@ -67,7 +67,7 @@ def test_user_register_unique_error(client, populate_db):
     response = client.post(
         '/user/register',
         content_type='application/json',
-        data=json.dumps({'username': 'test1', 'password': 'test'})
+        data=json.dumps({'username': 'test', 'password': 'test'})
     )
 
     assert response.status_code == 400
@@ -131,7 +131,7 @@ def test_user_login_bad_password(client, populate_db):
 def test_user_login(client, populate_db):
     response = client.post(
         '/user/login',
-        data=json.dumps({'username': 'test1', 'password': 'test'}),
+        data=json.dumps({'username': 'test', 'password': 'test'}),
         content_type='application/json'
     )
 
