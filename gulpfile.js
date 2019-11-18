@@ -1,16 +1,32 @@
 'use strict';
 
-const gulp = require('gulp');
+const {src, dest, watch, series, parallel} = require('gulp');
+const sourcemaps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
 
-sass.compiler = require('node-sass');
+const files = {
+  scssMainPath: './app/static/scss/main.scss',
+  scssPath: './app/static/scss/**/*.scss',
+  cssPath: './app/static/css'
+};
 
-gulp.task('sass', function() {
-    return gulp.src('./app/static/scss/main.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./app/static/css'))
-});
+function scssTask() {
+  return src(files.scssMainPath)
+    .pipe(sourcemaps.init())
+    .pipe(sass())
+    .pipe(postcss([autoprefixer(), cssnano()]))
+    .pipe(sourcemaps.write('.'))
+    .pipe(dest(files.cssPath))
+}
 
-gulp.task('sass:watch', function() {
-    gulp.watch('./app/static/scss/**/*.scss', ['sass']);
-});
+function watchTask() {
+  watch([files.scssPath], scssTask);
+}
+
+exports.default = series(
+  scssTask,
+  watchTask
+);
