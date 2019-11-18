@@ -24,18 +24,18 @@ class LoginForm(FlaskForm):
 @admin_main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('admin_main.home'))
 
     form = LoginForm()
 
     if form.validate_on_submit():
         user = UserModel.get_by_username(form.username.data)
-        if user is None or user.type != 'super' or user.check_password(form.password.data):
-            flash('Incorrect Username or Password')
-            return redirect(url_for('main.login'))
-        flash(f'User {user.username} has been logged in.')
-        login_user(user)
-        return redirect(url_for('main.home'))
+
+        if user is not None and user.check_password(form.password.data) and user.type == 'super':
+            login_user(user)
+            flash(f'User {user.username} has been logged in.')
+            return redirect(url_for('admin_main.home'))
+
     return render_template('main/login.html', form=form)
 
 
@@ -43,4 +43,4 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.login'))
+    return redirect(url_for('admin_main.login'))

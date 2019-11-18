@@ -30,6 +30,10 @@ def create_app(config_type):
     login.init_app(app)
     CORS(app, supports_credentials=True)
 
+    # Views
+    from app.views.main import admin_main
+    app.register_blueprint(admin_main)
+
     # Resources
     from app.resources.user import UserAvailable
     api.add_resource(UserAvailable, '/user/available')

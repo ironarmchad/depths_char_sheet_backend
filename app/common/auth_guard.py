@@ -11,7 +11,7 @@ def load_user(user_id):
     return UserModel.get_by_id(user_id)
 
 
-login.login_view = 'login'
+login.login_view = 'admin_main.login'
 
 
 def get_character(char_id):

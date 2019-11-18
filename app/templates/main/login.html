@@ -1,8 +1,9 @@
-{% extends 'layout.html %}
+{% extends 'layout.html' %}
 
 {% block content %}
 <div class="container">
   <form action="" method="post">
+    {{ form.hidden_tag() }}
     <h2>Super User Login</h2>
     <p>
       This is not the site you are looking for. Please move along to
