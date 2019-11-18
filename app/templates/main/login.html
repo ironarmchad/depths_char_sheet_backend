@@ -1,0 +1,28 @@
+{% extends 'layout.html %}
+
+{% block content %}
+<div class="container">
+  <form action="" method="post">
+    <h2>Super User Login</h2>
+    <p>
+      This is not the site you are looking for. Please move along to
+      <a href="https://depths-char-sheet.herokuapp.com/">Depths Character Sheet</a>. This is the pure backend with only
+      administration commands.
+    </p>
+
+    <div class="form-group">
+      {{ form.username.label }}
+      {{ form.username(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.password.label }}
+      {{ form.password(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.submit(class="btn btn-primary") }}
+    </div>
+  </form>
+</div>
+{% endblock content %}

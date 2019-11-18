@@ -4,31 +4,46 @@ from app import db
 class CharacterModel(db.Model):
     __tablename__ = 'characters'
     id = db.Column(db.Integer, primary_key=True)
-    owner = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(50), index=True)
-    summary = db.Column(db.String(150))
-    charType = db.Column(db.String(10))
-    gameId = db.Column(db.Integer, db.ForeignKey('games.id'))
-    lore = db.Column(db.String)
-    strength = db.Column(db.Integer)
-    reflex = db.Column(db.Integer)
-    speed = db.Column(db.Integer)
-    vitality = db.Column(db.Integer)
-    awareness = db.Column(db.Integer)
-    willpower = db.Column(db.Integer)
-    imagination = db.Column(db.Integer)
-    attunement = db.Column(db.Integer)
-    faith = db.Column(db.Integer)
-    luck = db.Column(db.Integer)
-    charisma = db.Column(db.Integer)
-    pointValue = db.Column(db.Integer)
+    lore = db.Column(db.JSON)
+    stats = db.Column(db.JSON)
+    abilities = db.Column(db.JSON)
 
-    def __init__(self, owner):
-        self.owner = owner
+    def __init__(self, owner_id):
+        self.owner_id = owner_id
 
+    # Representations
     def __repr__(self):
         return f'ID: {self.id} OWNER: {self.owner} NAME: {self.name}'
 
+    def jsonify_dict(self):
+        return {
+            'id': self.id,
+            'owner_id': self.owner_id,
+            'name': self.name,
+            'lore': self.lore,
+            'stats': self.stats,
+            'abilities': self.abilities
+        }
+
+    # Mutate entity methods
+    def patch_from_json(self, data):
+        if 'name' in data:
+            self.name = data['name']
+
+        if 'lore' in data:
+            self.lore = data['lore']
+
+        if 'stats' in data:
+            self.stats = data['stats']
+
+        if 'abilities' in data:
+            self.abilities = data['ablilities']
+
+        return self
+
+    # Mutate database methods
     def add_character(self):
         db.session.add(self)
         db.session.commit()
@@ -37,84 +52,9 @@ class CharacterModel(db.Model):
     def delete_character(self):
         db.session.delete(self)
         db.session.commit()
-
-    def jsonify_dict(self):
-        return {
-            'id': self.id,
-            'owner': self.owner,
-            'name': self.name,
-            'summary': self.summary,
-            'charType': self.charType,
-            'gameId': self.gameId,
-            'lore': self.lore,
-            'strength': self.strength,
-            'reflex': self.reflex,
-            'speed': self.speed,
-            'vitality': self.vitality,
-            'awareness': self.awareness,
-            'willpower': self.willpower,
-            'imagination': self.imagination,
-            'attunement': self.attunement,
-            'faith': self.faith,
-            'luck': self.luck,
-            'charisma': self.charisma,
-            'pointValue': self.pointValue
-        }
-
-    def patch_from_json(self, data):
-        if 'name' in data:
-            self.name = data['name']
-
-        if 'summary' in data:
-            self.summary = data['summary']
-
-        if 'charType' in data:
-            self.charType = data['charType']
-
-        if 'gameId' in data:
-            self.gameId = data['gameId']
-
-        if 'lore' in data:
-            self.lore = data['lore']
-
-        if 'strength' in data:
-            self.strength = data['strength']
-
-        if 'reflex' in data:
-            self.reflex = data['reflex']
-
-        if 'speed' in data:
-            self.speed = data['speed']
-
-        if 'vitality' in data:
-            self.vitality = data['vitality']
-
-        if 'awareness' in data:
-            self.awareness = data['awareness']
-
-        if 'willpower' in data:
-            self.willpower = data['willpower']
-
-        if 'imagination' in data:
-            self.imagination = data['imagination']
-
-        if 'attunement' in data:
-            self.attunement = data['attunement']
-
-        if 'faith' in data:
-            self.faith = data['faith']
-
-        if 'luck' in data:
-            self.luck = data['luck']
-
-        if 'charisma' in data:
-            self.charisma = data['charisma']
-
-        if 'pointValue' in data:
-            self.pointValue = data['pointValue']
-
         return self
 
+    # Database access methods
     @classmethod
     def get_by_id(cls, id):
         return cls.query.get(id)

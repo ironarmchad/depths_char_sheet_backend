@@ -1,7 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required,
-                                get_jwt_identity, get_raw_jwt)
+from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, get_jwt_identity)
 
 from app.models.user import UserModel
 
@@ -9,22 +8,8 @@ from app.models.user import UserModel
 class User(Resource):
     @jwt_required
     def get(self):
-        user = UserModel.query.get(get_jwt_identity())
+        user = UserModel.get_by_id(get_jwt_identity())
         return user.jsonify_dict()
-
-    '''    
-    @jwt_required
-    def post(self):
-        user = UserModel.query.get(get_jwt_identity())
-        data = UserSchema().loads(request.data)
-        
-        if UserModel.find_by_username(data.username):
-            return {'message': 'username must be unique'}, 400
-        else:
-            data.id = user.id
-            data.add_user()
-            return {'message': f'User {data.username} updated'}
-    '''
 
 
 class UserAvailable(Resource):
@@ -33,7 +18,7 @@ class UserAvailable(Resource):
 
         if not 'username' in data:
             return {'message': 'Must include username'}, 400
-        elif UserModel.find_by_username(data['username']):
+        elif UserModel.get_by_username(data['username']):
             return {'available': False}
         else:
             return {'available': True}
@@ -64,7 +49,7 @@ class UserLogin(Resource):
         if not 'username' in data or not 'password' in data:
             return {'message': 'username and password must be provided.'}, 400
 
-        current_user = UserModel.find_by_username(data['username'])
+        current_user = UserModel.get_by_username(data['username'])
 
         if not current_user:
             return {

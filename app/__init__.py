@@ -1,32 +1,36 @@
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
+from flask_login import LoginManager
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 
+
 db = SQLAlchemy()
-marsh = Marshmallow()
+login = LoginManager()
 
 
 def create_app(config_type):
-    app = Flask(__name__, template_folder='templates', static_folder='static')
-    app.config.from_pyfile(f'../config/{config_type}.py')
+    app = Flask(__name__, template_folder='templates', static_folder='static', instance_relative_config=True)
 
+    config = {
+        'dev': 'app.config.DevelopmentConfig'
+    }
+
+    # Config setup
+    app.config.from_object(config[config_type])
+    app.config.from_pyfile('config.cfg', silent=True)
+
+    # Service start-up
     api = Api(app)
     db.init_app(app)
-    marsh.init_app(app)
-    migrate = Migrate(app, db)
-    jwt = JWTManager(app)
-
+    Migrate(app, db)
+    JWTManager(app)
+    login.init_app(app)
     CORS(app, supports_credentials=True)
 
-    app.config['CORS_HEADERS'] = 'Content-Type'
-
-    from app.resources.hello import Hello
-    api.add_resource(Hello, '/hello')
-
+    # Resources
     from app.resources.user import UserAvailable
     api.add_resource(UserAvailable, '/user/available')
 
@@ -48,22 +52,4 @@ def create_app(config_type):
     from app.resources.character import Character
     api.add_resource(Character, '/character/get/<char_id>')
 
-    from app.resources.ability import Ability
-    api.add_resource(Ability, '/ability/get/<id>')
-
-    from app.resources.ability import AbilityNew
-    api.add_resource(AbilityNew, '/ability/new/<char_id>')
-
-    from app.resources.ability import AbilityAll
-    api.add_resource(AbilityAll, '/ability/all/<char_id>')
-
-    from app.resources.game import Game
-    api.add_resource(Game, '/game')
-
     return app
-
-
-'''
-    from app.resources.character import CharacterAll
-    api.add_resource(CharacterAll, '/character/all')
-'''
