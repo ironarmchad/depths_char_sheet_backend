@@ -11,7 +11,7 @@ marsh = Marshmallow()
 
 
 def create_app(config_type):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_pyfile(f'../config/{config_type}.py')
 
     api = Api(app)

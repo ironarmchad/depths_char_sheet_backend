@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+<head>
+  <meta charset="UTF-8">
+  <title>Depths API</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+{% endblock head %}
+
+{% block body %}
+<body>
+{% block navbar %}
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="{{ url_for('main.home') }}">
+    Depths API
+  </a>
+</nav>
+{% endblock navbar %}
+
+{% block content %} {% endblock content %}
+</body>
+{% endblock body %}
+</html>
