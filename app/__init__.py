@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flaskext.markdown import Markdown
 
 
 db = SQLAlchemy()
@@ -26,6 +27,7 @@ def create_app(config_type):
     api = Api(app)
     db.init_app(app)
     Migrate(app, db)
+    Markdown(app)
     JWTManager(app)
     login.init_app(app)
     CORS(app, supports_credentials=True)
@@ -36,6 +38,9 @@ def create_app(config_type):
 
     from app.views.users import admin_users
     app.register_blueprint(admin_users)
+
+    from app.views.compendium import admin_compendium
+    app.register_blueprint(admin_compendium)
 
     # Resources
     from app.resources.user import UserAvailable

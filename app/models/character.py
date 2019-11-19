@@ -60,5 +60,5 @@ class CharacterModel(db.Model):
         return cls.query.get(id)
 
     @classmethod
-    def get_all_by_owner(cls, owner):
-        return cls.query.filter_by(owner=owner).all()
+    def get_all_by_owner(cls, owner_id):
+        return cls.query.filter_by(owner_id=owner_id).all()

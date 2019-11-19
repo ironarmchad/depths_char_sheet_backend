@@ -6,10 +6,15 @@ from wtforms.validators import DataRequired
 
 from app.models.user import UserModel
 
-admin_main = Blueprint('admin_main', __name__, url_prefix='/admin')
+admin_main = Blueprint('admin_main', __name__)
 
 
 @admin_main.route('/')
+def index_reroute():
+    return redirect(url_for('admin_main.home'))
+
+
+@admin_main.route('/admin/')
 @login_required
 def home():
     return render_template('main/home.html')
@@ -21,7 +26,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-@admin_main.route('/login', methods=['GET', 'POST'])
+@admin_main.route('/admin/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('admin_main.home'))
@@ -39,7 +44,7 @@ def login():
     return render_template('main/login.html', form=form)
 
 
-@admin_main.route('/logout')
+@admin_main.route('/admin/logout/')
 @login_required
 def logout():
     logout_user()

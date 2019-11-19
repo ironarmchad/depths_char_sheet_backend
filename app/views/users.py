@@ -74,11 +74,3 @@ def delete(user_id):
         flash(f'User #{user_id} can\'t be deleted')
 
     return redirect(url_for('admin_users.all_users'))
-
-
-@admin_users.route('/new/<username>')
-@login_required
-def new(username):
-    user = UserModel(username, 'temppassword')
-
-    return redirect(url_for('admin_users.edit', user_id=user.id))
