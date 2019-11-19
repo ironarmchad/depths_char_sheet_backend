@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2>{{ user.username }}</h2>
+    </div>
+
+    <div class="col">
+      <div class="btn-toolbar">
+        <a class="btn btn-sm btn-secondary" href="{{ url_for('admin_users.edit', user_id=user.id) }}">Edit User</a>
+        <a class="btn btn-sm btn-danger" href="{{ url_for('admin_users.delete', user_id=user.id) }}">Delete User</a>
+      </div>
+    </div>
+  </div>
+  <p>Character list will be here</p>
+</div>
+{% endblock content %}

@@ -34,6 +34,9 @@ def create_app(config_type):
     from app.views.main import admin_main
     app.register_blueprint(admin_main)
 
+    from app.views.users import admin_users
+    app.register_blueprint(admin_users)
+
     # Resources
     from app.resources.user import UserAvailable
     api.add_resource(UserAvailable, '/user/available')

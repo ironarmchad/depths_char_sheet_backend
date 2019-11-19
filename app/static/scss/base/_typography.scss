@@ -1,0 +1,15 @@
+html {
+  font-size: 16px;
+}
+
+@media screen and (min-width: $minViewWidth){
+  html {
+    font-size: calc(#{$minFontSize} + (#{$maxFontSize}) * ((100vw - #{$minViewWidth}) / (#{$maxViewWidth} - #{$minViewWidth})));
+  }
+}
+
+@media screen and (min-width: $maxViewWidth) {
+  html {
+    font-size: $maxFontSize;
+  }
+}

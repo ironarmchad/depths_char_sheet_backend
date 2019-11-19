@@ -48,6 +48,10 @@ class UserModel(db.Model, UserMixin):
 
     # Database accessors
     @classmethod
+    def get_all(cls):
+        return cls.query.order_by(cls.username).all()
+
+    @classmethod
     def get_by_id(cls, user_id):
         return cls.query.get(user_id)
 

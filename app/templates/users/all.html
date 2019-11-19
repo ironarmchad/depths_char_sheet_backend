@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2>All Users</h2>
+      {% for user in users %}
+      <div class="row">
+        <div class="col">
+          <h4>
+            <a href="{{ url_for('admin_users.profile', user_id=user.id) }}">
+              {{ user.username }}
+            </a>
+          </h4>
+        </div>
+
+        <div class="col">
+          <div class="btn-toolbar">
+            <a class="btn btn-sm btn-secondary" href="{{ url_for('admin_users.profile', user_id=user.id) }}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="{{ url_for('admin_users.delete', user_id=user.id) }}">Delete</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <form class="col" action="" method="post">
+      {{ form.hidden_tag() }}
+      <h2>New User</h2>
+      <div class="form-group">
+        {{ form.username(class="form-control") }}
+      </div>
+
+      <div class="form-group">
+        {{ form.submit(class="btn btn-sm btn-primary") }}
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock content %}
