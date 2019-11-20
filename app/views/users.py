@@ -58,6 +58,7 @@ def edit(user_id):
             flash(f'User #{user.id}\'s password has been changed.')
             user.change_password(form.password.data)
 
+        user.add_user()
         return redirect(url_for('admin_users.profile', user_id=user_id))
 
     return render_template('users/edit.html', user=user, form=form)

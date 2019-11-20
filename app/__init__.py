@@ -16,7 +16,8 @@ def create_app(config_type):
     app = Flask(__name__, template_folder='templates', static_folder='static', instance_relative_config=True)
 
     config = {
-        'dev': 'app.config.DevelopmentConfig'
+        'dev': 'app.config.DevelopmentConfig',
+        'prod': 'app.config.ProductionConfig'
     }
 
     # Config setup
@@ -54,6 +55,12 @@ def create_app(config_type):
 
     from app.resources.user import UserLogin
     api.add_resource(UserLogin, '/user/login')
+
+    from app.resources.compendium import CompendiumAll
+    api.add_resource(CompendiumAll, '/compendium/all')
+
+    from app.resources.compendium import Compendium
+    api.add_resource(Compendium, '/compendium/get/<compendium_id')
 
     from app.resources.character import CharacterAll
     api.add_resource(CharacterAll, '/character/all')

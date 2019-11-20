@@ -13,8 +13,9 @@
           </h4>
         </div>
 
-        <div class="col">
+        <div class="col-8">
           <div class="btn-toolbar">
+            <a class="btn btn-sm btn-info" href="{{ url_for('admin_compendium.json', compendium_id=page.id) }}">JSON</a>
             <a class="btn btn-sm btn-secondary" href="{{ url_for('admin_compendium.edit', compendium_id=page.id) }}">Edit</a>
             <a class="btn btn-sm btn-danger" href="{{ url_for('admin_compendium.delete', compendium_id=page.id) }}">Delete</a>
           </div>
@@ -23,7 +24,7 @@
       {% endfor %}
     </div>
 
-    <form class="col" action="" method="post">
+    <form class="col-4" action="" method="post">
       {{ form.hidden_tag() }}
 
       <h2>New Compendium Page</h2>

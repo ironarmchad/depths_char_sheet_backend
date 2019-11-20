@@ -22,6 +22,13 @@ class CompendiumModel(db.Model):
             'content': self.content
         }
 
+    def jsonify_short(self):
+        return {
+            'id': self.id,
+            'owner_id': self.owner_id,
+            'title': self.title
+        }
+
     # Mutate entity methods
     def patch_from_json(self, data):
         if 'title' in data:

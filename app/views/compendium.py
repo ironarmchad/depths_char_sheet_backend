@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, render_template, redirect, url_for
+from flask import Blueprint, flash, render_template, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
@@ -71,3 +71,10 @@ def delete(compendium_id):
     CompendiumModel.get_by_id(compendium_id).delete_compendium()
     flash(f'Page #{compendium_id} has been deleted.')
     return redirect(url_for('admin_compendium.all_compendium'))
+
+
+@admin_compendium.route('/json/<compendium_id>')
+@login_required
+def json(compendium_id):
+    page = CompendiumModel.get_by_id(compendium_id)
+    return jsonify(page.jsonify_dict())
