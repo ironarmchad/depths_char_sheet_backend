@@ -17,7 +17,8 @@ def create_app(config_type):
 
     config = {
         'dev': 'app.config.DevelopmentConfig',
-        'prod': 'app.config.ProductionConfig'
+        'prod': 'app.config.ProductionConfig',
+        'staging': 'app.config.StagingConfig'
     }
 
     # Config setup
@@ -60,7 +61,7 @@ def create_app(config_type):
     api.add_resource(CompendiumAll, '/compendium/all')
 
     from app.resources.compendium import Compendium
-    api.add_resource(Compendium, '/compendium/get/<compendium_id')
+    api.add_resource(Compendium, '/compendium/get/<compendium_id>')
 
     from app.resources.character import CharacterAll
     api.add_resource(CharacterAll, '/character/all')
