@@ -17,7 +17,7 @@ class CompendiumModel(db.Model):
     def jsonify_dict(self):
         return {
             'id': self.id,
-            'owner_id': self.owner_id,
+            'ownerId': self.owner_id,
             'title': self.title,
             'content': self.content
         }
@@ -25,7 +25,7 @@ class CompendiumModel(db.Model):
     def jsonify_short(self):
         return {
             'id': self.id,
-            'owner_id': self.owner_id,
+            'ownerId': self.owner_id,
             'title': self.title
         }
 

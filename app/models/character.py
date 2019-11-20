@@ -20,7 +20,7 @@ class CharacterModel(db.Model):
     def jsonify_dict(self):
         return {
             'id': self.id,
-            'owner_id': self.owner_id,
+            'ownerId': self.owner_id,
             'name': self.name,
             'lore': self.lore,
             'stats': self.stats,

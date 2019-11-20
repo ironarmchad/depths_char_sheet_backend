@@ -41,6 +41,9 @@ def login():
             flash(f'User {user.username} has been logged in.')
             return redirect(url_for('admin_main.home'))
 
+        flash('Incorrect Credentials')
+        return redirect(url_for('admin_main.login'))
+
     return render_template('main/login.html', form=form)
 
 
