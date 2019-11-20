@@ -14,6 +14,10 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
+    SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+
     SQLALCHEMY_DATABASE_URI = os.getenv('HEROKU_POSTGRESQL_GREEN_URL')
 
 
