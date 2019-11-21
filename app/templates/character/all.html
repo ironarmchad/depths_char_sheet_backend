@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row justify-content-around">
+    <div class="col-auto">
+      <h2 class="text-center">All Characters</h2>
+      {% for character in characters %}
+      <div class="d-flex flex-row justify-content-between my-2">
+        <h4 class="mr-4">
+          <a href="{{ url_for('admin_character.profile', character_id=character.id) }}">
+            {{ character.name }}
+          </a>
+        </h4>
+        <div class="btn-toolbar">
+          <a class="btn btn-sm btn-info"
+             href="{{ url_for('admin_character.json', character_id=character.id) }}">JSON</a>
+          <a class="btn btn-sm btn-secondary" href="{{ url_for('admin_character.edit', character_id=character.id) }}">Edit</a>
+          <a class="btn btn-sm btn-danger" href="{{ url_for('admin_character.delete', character_id=character.id) }}">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <form class="col-4" action="" method="post">
+      {{ form.hidden_tag() }}
+
+      <h2 class="text-center">New Character</h2>
+
+      <div class="form-group">
+        {{ form.owner.label }}
+        {{ form.owner(class="form-control") }}
+      </div>
+
+      <div class="form-group text-center">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}

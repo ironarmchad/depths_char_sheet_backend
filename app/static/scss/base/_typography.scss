@@ -1,4 +1,6 @@
 html {
-  font-size: 100%;
+  @include fluid_type($min_width, $max_width, $min_font, $max_font);
 }
+
+
 

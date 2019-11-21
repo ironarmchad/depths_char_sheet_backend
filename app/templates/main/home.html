@@ -5,6 +5,6 @@
   <h2>Administrative Areas</h2>
   <h4><a href="{{ url_for('admin_users.all_users') }}">Users</a></h4>
   <h4><a href="{{ url_for('admin_compendium.all_compendium') }}">Compendium</a></h4>
-  <h4><a href="#">Characters</a></h4>
+  <h4><a href="{{ url_for('admin_character.all_characters') }}">Characters</a></h4>
 </div>
 {% endblock content %}

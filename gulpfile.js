@@ -13,6 +13,14 @@ const files = {
   cssPath: './app/static/css'
 };
 
+function scssTaskDebug() {
+  return src(files.scssMainPath)
+    .pipe(sourcemaps.init())
+    .pipe(sass())
+    .pipe(sourcemaps.write('.'))
+    .pipe(dest(files.cssPath))
+}
+
 function scssTask() {
   return src(files.scssMainPath)
     .pipe(sourcemaps.init())
@@ -25,6 +33,8 @@ function scssTask() {
 function watchTask() {
   watch([files.scssPath], scssTask);
 }
+
+exports.scssDebug = scssTaskDebug;
 
 exports.default = series(
   scssTask,

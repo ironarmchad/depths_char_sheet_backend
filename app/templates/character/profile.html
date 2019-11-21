@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ character.name }}</h2>
+
+  <h4><strong>Character ID:</strong> {{ character.id }}</h4>
+
+  <h4><strong>Owner ID:</strong> {{ character.owner_id }}</h4>
+
+  <h4><strong>Lore:</strong></h4>
+  <p>{{ character.lore }}</p>
+
+  <h4><strong>Stats:</strong></h4>
+  <p>{{ character.stats }}</p>
+
+  <h4><strong>Abilities:</strong></h4>
+  <p>{{ character.abilities }}</p>
+</div>
+{% endblock content %}
