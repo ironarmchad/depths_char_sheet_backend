@@ -33,13 +33,14 @@ class Character(Resource):
     @jwt_required
     def patch(self, char_id):
         data = request.json
+        print(data)
 
         try:
             character = get_character(char_id)
         except Error as err:
             return {'message': err.message}, 400
 
-        character.patch_from_json(data['character']).add_character()
+        character.patch_from_json(data).add_character()
 
         return character.jsonify_dict()
 

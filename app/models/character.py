@@ -15,7 +15,7 @@ class CharacterModel(db.Model):
 
     # Representations
     def __repr__(self):
-        return f'ID: {self.id} OWNER: {self.owner} NAME: {self.name}'
+        return f'ID: {self.id} OWNER: {self.owner_id} NAME: {self.name}'
 
     def jsonify_dict(self):
         return {
@@ -39,7 +39,7 @@ class CharacterModel(db.Model):
             self.stats = data['stats']
 
         if 'abilities' in data:
-            self.abilities = data['ablilities']
+            self.abilities = data['abilities']
 
         return self
 

@@ -18,7 +18,7 @@ def get_character(char_id):
     character = CharacterModel.get_by_id(char_id)
     if not character:
         raise NotFoundError()
-    elif character.owner != get_jwt_identity():
+    elif character.owner_id != get_jwt_identity():
         raise NotOwnerError()
     else:
         return character
