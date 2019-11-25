@@ -9,15 +9,11 @@ from app.models.character import CharacterModel
 
 class CharacterNew(Resource):
     @jwt_required
-    def post(self):
+    def get(self):
         owner = get_jwt_identity()
-        new_character = CharacterModel(owner)
+        new_character = CharacterModel(owner).add_character()
 
-        new_character.patch_from_json(request.json)
-
-        new_character.add_character()
-
-        return new_character.jsonify_dict()
+        return {'char_id': new_character.id}
 
 
 class Character(Resource):
@@ -62,6 +58,6 @@ class CharacterAll(Resource):
         owner = get_jwt_identity()
         characters = CharacterModel.get_all_by_owner(owner)
         if not characters:
-            return {"message": "No characters found."}, 400
+            return {"message": "No characters found."}
         else:
             return {"characters": [character.jsonify_dict() for character in characters]}
