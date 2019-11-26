@@ -21,8 +21,10 @@ def all_users():
     users = UserModel.get_all()
 
     if form.validate_on_submit():
-        user = UserModel(form.username.data, 'temppassword').add_user()
-        return redirect(url_for('admin_users.edit', user_id=user.id))
+        if UserModel.username_available(form.username.data):
+            user = UserModel(form.username.data, 'temppassword').add_user()
+            return redirect(url_for('admin_users.edit', user_id=user.id))
+        flash('Username already in use.')
 
     return render_template('users/all.html', users=users, form=form)
 

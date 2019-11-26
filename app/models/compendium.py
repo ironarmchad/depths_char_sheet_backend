@@ -5,13 +5,22 @@ class CompendiumModel(db.Model):
     __tablename__ = 'compendium'
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    title = db.Column(db.String, index=True)
+    title = db.Column(db.String, index=True, nullable=False, unique=True)
     content = db.Column(db.String)
 
     def __init__(self, owner_id, title):
         self.owner_id = owner_id
         self.title = title
         self.content = ""
+
+    # Helper functions
+    @classmethod
+    def title_available(cls, title):
+        poss_page = cls.get_by_title(title)
+        if not poss_page:
+            return True
+        else:
+            return False
 
     # Representation
     def jsonify_dict(self):
@@ -54,6 +63,10 @@ class CompendiumModel(db.Model):
     @classmethod
     def get_by_id(cls, compendium_id):
         return cls.query.get(compendium_id)
+
+    @classmethod
+    def get_by_title(cls, compendium_title):
+        return cls.query.filter_by(title=compendium_title).first()
 
     @classmethod
     def get_all(cls):

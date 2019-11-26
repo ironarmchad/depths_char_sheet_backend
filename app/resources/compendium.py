@@ -4,8 +4,8 @@ from app.models.compendium import CompendiumModel
 
 
 class Compendium(Resource):
-    def get(self, compendium_id):
-        return CompendiumModel.get_by_id(compendium_id).jsonify_dict()
+    def get(self, compendium_title):
+        return CompendiumModel.get_by_title(compendium_title).jsonify_dict()
 
 
 class CompendiumAll(Resource):

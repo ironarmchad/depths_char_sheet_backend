@@ -16,6 +16,15 @@ class UserModel(db.Model, UserMixin):
         self.password = sha256.hash(password)
         self.type = 'normal'
 
+    # Helper Functions
+    @classmethod
+    def username_available(cls, username):
+        user = cls.get_by_username(username)
+        if not user:
+            return True
+        else:
+            return False
+
     # Representations
     def __repr__(self):
         return f'ID: {self.id} USERNAME: {self.username}'

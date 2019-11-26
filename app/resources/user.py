@@ -18,10 +18,10 @@ class UserAvailable(Resource):
 
         if not 'username' in data:
             return {'message': 'Must include username'}, 400
-        elif UserModel.get_by_username(data['username']):
-            return {'available': False}
-        else:
+        elif UserModel.username_available(data['username']):
             return {'available': True}
+        else:
+            return {'available': False}
 
 
 class UserRegister(Resource):

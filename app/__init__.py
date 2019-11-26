@@ -66,7 +66,7 @@ def create_app(config_type):
     api.add_resource(CompendiumAll, '/compendium/all')
 
     from app.resources.compendium import Compendium
-    api.add_resource(Compendium, '/compendium/get/<compendium_id>')
+    api.add_resource(Compendium, '/compendium/get/<compendium_title>')
 
     from app.resources.character import CharacterAll
     api.add_resource(CharacterAll, '/character/all')

@@ -24,8 +24,10 @@ def all_compendium():
     pages = CompendiumModel.get_all()
 
     if form.validate_on_submit():
-        new_page = CompendiumModel(current_user.id, form.title.data).add_compendium()
-        return redirect(url_for('admin_compendium.edit', compendium_id=new_page.id))
+        if CompendiumModel.title_available(form.title.data):
+            new_page = CompendiumModel(current_user.id, form.title.data).add_compendium()
+            return redirect(url_for('admin_compendium.edit', compendium_id=new_page.id))
+        flash('Title in use.')
 
     return render_template('compendium/all.html', form=form, pages=pages)
 
