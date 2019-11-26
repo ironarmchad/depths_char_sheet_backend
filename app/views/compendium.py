@@ -64,14 +64,7 @@ def edit(compendium_id):
         if form.file.data:
             flash(f'Page #{page.id}\'s contents have been replaced with file contents.')
 
-            file = form.file.data
-            filepath = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
-            file.save(filepath)
-
-            with open(filepath) as f:
-                page.content = f.read()
-
-            os.remove(filepath)
+            page.content = form.file.data.read().decode('utf-8')
 
         elif form.content.data != page.content:
             flash(f'Page #{page.id}\'s content has been changed.')
