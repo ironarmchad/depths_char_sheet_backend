@@ -1,10 +1,21 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<form class="container" action="" method="post">
+<form class="container" action="" method="post" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
 
-  <h2>Editing Compendium Page #{{ page.id }}</h2>
+  <div class="row">
+    <div class="col-8 h2">
+      Editing Compendium Page #{{ page.id }}
+    </div>
+
+    <div class="col">
+      <div class="btn-toolbar">
+        <a class="btn btn-primary" href="{{ url_for('admin_compendium.profile', compendium_id=page.id) }}">View</a>
+        <a class="btn btn-danger" href="{{ url_for('admin_compendium.delete', compendium_id=page.id) }}">Delete</a>
+      </div>
+    </div>
+  </div>
 
   <div class="form-group">
     {{ form.title.label }}
@@ -17,7 +28,13 @@
   </div>
 
   <div class="form-group">
+    {{ form.file.label }}
+    {{ form.file(class="form-control-file") }}
+  </div>
+
+  <div class="form-group text-center">
     {{ form.submit(class="btn btn-primary") }}
+
   </div>
 </form>
 {% endblock content %}

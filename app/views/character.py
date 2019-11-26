@@ -73,7 +73,7 @@ def edit(character_id):
 def delete(character_id):
     character = CharacterModel.get_by_id(character_id).delete_character()
     flash(f'Page #{character_id}\'s has been deleted.')
-    return redirect(url_for('admin_users.profile', user_id=character.owner_id))
+    return redirect(url_for('admin_users.edit', user_id=character.owner_id))
 
 
 @admin_character.route('/json/<character_id>')

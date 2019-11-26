@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flaskext.markdown import Markdown
 
+from app.common.file_util import UPLOAD_FOLDER
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -23,6 +24,7 @@ def create_app(config_type):
 
     # Config setup
     app.config.from_object(config[config_type])
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config.from_pyfile('config.cfg', silent=True)
 
     # Service start-up
