@@ -1,12 +1,9 @@
-import os
 from flask import Blueprint, flash, render_template, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, FileField, SubmitField
 from wtforms.validators import DataRequired
-from werkzeug.utils import secure_filename
 
-from app.common.file_util import UPLOAD_FOLDER
 from app.models.compendium import CompendiumModel
 
 admin_compendium = Blueprint('admin_compendium', __name__, url_prefix='/admin-compendium')

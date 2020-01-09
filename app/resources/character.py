@@ -29,7 +29,6 @@ class Character(Resource):
     @jwt_required
     def patch(self, char_id):
         data = request.json
-        print(data)
 
         try:
             character = get_character(char_id)
@@ -57,6 +56,17 @@ class CharacterAll(Resource):
     def get(self):
         owner = get_jwt_identity()
         characters = CharacterModel.get_all_by_owner(owner)
+        if not characters:
+            return {"message": "No characters found."}
+        else:
+            return {"characters": [character.jsonify_dict() for character in characters]}
+
+
+class CharacterViewable(Resource):
+    @jwt_required
+    def get(self):
+        owner = get_jwt_identity()
+        characters = CharacterModel.get_all_by_viewer(owner)
         if not characters:
             return {"message": "No characters found."}
         else:

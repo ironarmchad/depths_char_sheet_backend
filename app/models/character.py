@@ -5,6 +5,7 @@ class CharacterModel(db.Model):
     __tablename__ = 'characters'
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    viewers = db.Column(db.JSON)
     name = db.Column(db.String(50), index=True)
     lore = db.Column(db.JSON)
     stats = db.Column(db.JSON)
@@ -12,6 +13,7 @@ class CharacterModel(db.Model):
 
     def __init__(self, owner_id):
         self.owner_id = owner_id
+        self.viewers = [owner_id]
 
     # Representations
     def __repr__(self):
@@ -21,6 +23,7 @@ class CharacterModel(db.Model):
         return {
             'id': self.id,
             'ownerId': self.owner_id,
+            'viewers': self.viewers,
             'name': self.name,
             'lore': self.lore,
             'stats': self.stats,
@@ -29,6 +32,11 @@ class CharacterModel(db.Model):
 
     # Mutate entity methods
     def patch_from_json(self, data):
+        if 'viewers' in data:
+            self.viewers = data['viewers']
+            if not (self.owner_id in self.viewers):
+                self.viewers.append(self.owner_id)
+
         if 'name' in data:
             self.name = data['name']
 
@@ -66,3 +74,11 @@ class CharacterModel(db.Model):
     @classmethod
     def get_all_by_owner(cls, owner_id):
         return cls.query.filter_by(owner_id=owner_id).order_by(cls.name).all()
+
+    @classmethod
+    def get_all_by_viewer(cls, viewer_id):
+        characters = []
+        for character in cls.query.order_by(cls.name).all():
+            if viewer_id in character.viewers:
+                characters.append(character)
+        return characters
