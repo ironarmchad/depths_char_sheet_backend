@@ -12,6 +12,14 @@ class User(Resource):
         return user.jsonify_dict()
 
 
+class UserAll(Resource):
+    @jwt_required
+    def get(self):
+        users = UserModel.get_all()
+
+        return [{'id': user.id, 'username': user.username} for user in users]
+
+
 class UserAvailable(Resource):
     def post(self):
         data = request.json
@@ -31,7 +39,7 @@ class UserRegister(Resource):
         if not 'username' in data or not 'password' in data:
             return {'message': 'username and password must be provided.'}, 400
 
-        if UserModel.find_by_username(data['username']):
+        if UserModel.get_by_username(data['username']):
             return {'message': 'username must be unique'}, 400
 
         user = UserModel(data['username'], data['password']).add_user()

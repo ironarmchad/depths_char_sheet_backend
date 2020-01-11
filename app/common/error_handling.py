@@ -11,3 +11,8 @@ class NotFoundError(Error):
 class NotOwnerError(Error):
     def __init__(self):
         super().__init__('Cannot access another players character.')
+
+
+class NotAuthorizedError(Error):
+    def __init__(self):
+        super().__init__('User not authorized to receive character.')

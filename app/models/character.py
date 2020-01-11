@@ -33,9 +33,7 @@ class CharacterModel(db.Model):
     # Mutate entity methods
     def patch_from_json(self, data):
         if 'viewers' in data:
-            self.viewers = data['viewers']
-            if not (self.owner_id in self.viewers):
-                self.viewers.append(self.owner_id)
+            self.viewers = [viewer for viewer in data['viewers'] if viewer != self.owner_id]
 
         if 'name' in data:
             self.name = data['name']

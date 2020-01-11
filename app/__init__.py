@@ -48,11 +48,14 @@ def create_app(config_type):
     app.register_blueprint(admin_character)
 
     # Resources
+    from app.resources.user import User
+    api.add_resource(User, '/user')
+
     from app.resources.user import UserAvailable
     api.add_resource(UserAvailable, '/user/available')
 
-    from app.resources.user import User
-    api.add_resource(User, '/user')
+    from app.resources.user import UserAll
+    api.add_resource(UserAll, '/user/all')
 
     from app.resources.user import UserRegister
     api.add_resource(UserRegister, '/user/register')

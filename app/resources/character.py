@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from app.common.auth_guard import get_character
+from app.common.auth_guard import get_character_patch, get_character_view
 from app.common.error_handling import Error
 from app.models.character import CharacterModel
 
@@ -20,7 +20,7 @@ class Character(Resource):
     @jwt_required
     def get(self, char_id):
         try:
-            character = get_character(char_id)
+            character = get_character_view(char_id)
         except Error as err:
             return {'message': err.message}, 400
 
@@ -31,7 +31,7 @@ class Character(Resource):
         data = request.json
 
         try:
-            character = get_character(char_id)
+            character = get_character_patch(char_id)
         except Error as err:
             return {'message': err.message}, 400
 
@@ -42,7 +42,7 @@ class Character(Resource):
     @jwt_required
     def delete(self, char_id):
         try:
-            character = get_character(char_id)
+            character = get_character_patch(char_id)
         except Error as err:
             return {'message': err.message}, 400
 
