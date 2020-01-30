@@ -13,7 +13,6 @@ class CharacterModel(db.Model):
 
     def __init__(self, owner_id):
         self.owner_id = owner_id
-        self.viewers = [owner_id]
 
     # Representations
     def __repr__(self):
@@ -77,6 +76,7 @@ class CharacterModel(db.Model):
     def get_all_by_viewer(cls, viewer_id):
         characters = []
         for character in cls.query.order_by(cls.name).all():
-            if viewer_id in character.viewers:
-                characters.append(character)
+            if character.viewers:
+                if viewer_id in character.viewers:
+                    characters.append(character)
         return characters
