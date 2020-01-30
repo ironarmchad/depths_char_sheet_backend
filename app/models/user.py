@@ -10,6 +10,7 @@ class UserModel(db.Model, UserMixin):
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=False)
+    info = db.Column(db.JSON)
 
     def __init__(self, username, password):
         self.username = username
@@ -30,7 +31,7 @@ class UserModel(db.Model, UserMixin):
         return f'ID: {self.id} USERNAME: {self.username}'
 
     def jsonify_dict(self):
-        return {'id': self.id, 'username': self.username}
+        return {'id': self.id, 'username': self.username, 'info': self.info}
 
     def check_password(self, password):
         return sha256.verify(password, self.password)
@@ -42,6 +43,10 @@ class UserModel(db.Model, UserMixin):
 
     def change_password(self, password):
         self.password = sha256.hash(password)
+        return self
+
+    def update_info(self, info):
+        self.info = info
         return self
 
     # Mutate database

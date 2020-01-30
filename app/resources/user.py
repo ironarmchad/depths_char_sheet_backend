@@ -12,6 +12,19 @@ class User(Resource):
         return user.jsonify_dict()
 
 
+class UserInfo(Resource):
+    @jwt_required
+    def get(self):
+        user = UserModel.get_by_id(get_jwt_identity())
+        return {user.info}, 200
+
+    @jwt_required
+    def post(self, info):
+        user = UserModel.get_by_id(get_jwt_identity())
+        print(info)
+        return {'msg': 'User updated.'}, 200
+
+
 class UserAll(Resource):
     @jwt_required
     def get(self):
@@ -70,6 +83,7 @@ class UserLogin(Resource):
         else:
             return {
                 'username': current_user.username,
+                'info': current_user.info,
                 'accessToken': create_access_token(identity=current_user.id),
                 'refreshToken': create_access_token(identity=current_user.id)
             }

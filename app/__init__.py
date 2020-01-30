@@ -51,6 +51,9 @@ def create_app(config_type):
     from app.resources.user import User
     api.add_resource(User, '/user')
 
+    from app.resources.user import UserInfo
+    api.add_resource(UserInfo, '/user/info')
+
     from app.resources.user import UserAvailable
     api.add_resource(UserAvailable, '/user/available')
 
